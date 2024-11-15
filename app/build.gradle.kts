@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.papb.tolonginprojectpapb"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.papb.tolonginprojectpapb"
@@ -70,4 +70,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+//    splash screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }

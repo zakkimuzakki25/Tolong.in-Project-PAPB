@@ -1,3 +1,3 @@
 package com.papb.tolonginprojectpapb.entities
 
-data class CampaignMission()
+//data class CampaignMission()
