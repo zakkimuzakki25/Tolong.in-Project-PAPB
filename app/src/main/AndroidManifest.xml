@@ -13,6 +13,53 @@
         android:theme="@style/Theme.TolonginProjectPAPB"
         tools:targetApi="31">
         <activity
+            android:name=".activities.ProfileEditActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ProfileSettingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ProfileCarboActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ProfilePostsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.CreateForumActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ForumActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.BigMissionActionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.BigMissionDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.DailyMissionDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.VolunteerActionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.VolunteerDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.KampanyeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.CameraVerificationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.LogInActivity"
+            android:exported="false"
+            android:label="@string/title_activity_log_in"
+            android:theme="@style/Theme.TolonginProjectPAPB" />
+        <activity
+            android:name=".activities.SignUpActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
