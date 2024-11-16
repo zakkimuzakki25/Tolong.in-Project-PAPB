@@ -55,6 +55,7 @@ fun BottomBar(navController: NavHostController) {
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
+            .padding(bottom = 12.dp)
             .shadow(16.dp, shape = RoundedCornerShape(topStart = 14.dp, topEnd = 14.dp))
     ) {
         BottomAppBar(
