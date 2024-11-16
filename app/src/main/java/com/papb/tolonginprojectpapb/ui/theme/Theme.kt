@@ -56,7 +56,7 @@ fun TolonginProjectPAPBTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = SetTypography,
         content = content
     )
 }

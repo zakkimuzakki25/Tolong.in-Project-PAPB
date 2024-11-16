@@ -10,14 +10,13 @@ import com.papb.tolonginprojectpapb.R
 
 // Import font Maison Neue
 val MaisonNeue = FontFamily(
-    Font(R.font.Maison_Neue_Light, FontWeight.Light),
-    Font(R.font.Maison_Neue_Book, FontWeight.Medium),
-    Font(R.font.Maison_Neue_Book, FontWeight.Bold),
-    Font(R.font.Maison_Neue_Bold, FontWeight.SemiBold)
+    Font(R.font.maison_neue_light, FontWeight.Light),
+    Font(R.font.maison_neue_book, FontWeight.Medium),
+    Font(R.font.maison_neue_bold, FontWeight.SemiBold),
+    Font(R.font.maison_neue_book, FontWeight.Bold)
 )
 
-// Set Typography
-val Typography = Typography(
+val SetTypography = Typography(
     // Display Large (Heading 1)
     displayLarge = TextStyle(
         fontFamily = MaisonNeue,
@@ -114,15 +113,15 @@ val Typography = Typography(
         lineHeight = 18.sp,
         letterSpacing = 0.sp
     ),
-    // Label Large (Button - Bold)
+    // Label Large
     labelLarge = TextStyle(
         fontFamily = MaisonNeue,
-        fontWeight = FontWeight.Bold,
-        fontSize = 14.sp,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 16.sp,
         lineHeight = 21.sp,
         letterSpacing = 0.sp
     ),
-    // Label Medium (Button - DemiBold)
+    // Label Medium
     labelMedium = TextStyle(
         fontFamily = MaisonNeue,
         fontWeight = FontWeight.SemiBold,
@@ -130,11 +129,11 @@ val Typography = Typography(
         lineHeight = 21.sp,
         letterSpacing = 0.sp
     ),
-    // Label Small (Button - Light)
+    // Label Small
     labelSmall = TextStyle(
         fontFamily = MaisonNeue,
-        fontWeight = FontWeight.Light,
-        fontSize = 14.sp,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 12.sp,
         lineHeight = 21.sp,
         letterSpacing = 0.sp
     )

@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.papb.tolonginprojectpapb.ui.theme.Based100
 import com.papb.tolonginprojectpapb.ui.theme.Neutral200
 import com.papb.tolonginprojectpapb.ui.theme.Primary500
@@ -37,7 +36,7 @@ fun PrimerButton(
     ) {
         Text(
             text = text,
-            fontSize = 16.sp
+            style = size.style
         )
     }
 }

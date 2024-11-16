@@ -12,11 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.papb.tolonginprojectpapb.R
 import com.papb.tolonginprojectpapb.ui.theme.Primary500
+import com.papb.tolonginprojectpapb.ui.theme.SetTypography
 
 @Composable
 fun BackHeader(
@@ -27,7 +26,7 @@ fun BackHeader(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(vertical = 18.dp, horizontal = 20.dp)
             .background(Color.White),
         contentAlignment = Alignment.Center
     ) {
@@ -47,17 +46,8 @@ fun BackHeader(
         Text(
             text = title,
             color = Primary500,
-            fontSize = 20.sp,
+            style = SetTypography.titleLarge,
             textAlign = TextAlign.Center
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun BackHeaderPreview() {
-    BackHeader(
-        title = "Sample Title",
-        onBackClick = { /* Do nothing for preview */ }
-    )
 }

@@ -19,6 +19,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.papb.tolonginprojectpapb.ui.components.buttons.ButtonSize
 import com.papb.tolonginprojectpapb.ui.components.buttons.PrimerButton
+import com.papb.tolonginprojectpapb.ui.components.headers.BackHeader
+import com.papb.tolonginprojectpapb.ui.components.headers.NonBackHeader
 import com.papb.tolonginprojectpapb.ui.theme.TolonginProjectPAPBTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -41,7 +43,16 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier
                             .padding(innerPadding)
                     ) {
-                        Spacer(modifier = Modifier.height(24.dp))
+                        BackHeader(
+                            title = "Contoh Text",
+                            onBackClick = {},
+                        )
+
+                        NonBackHeader(
+                            title = "Contoh Text",
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
 
                         PrimerButton(
                             text = "Button 1",
