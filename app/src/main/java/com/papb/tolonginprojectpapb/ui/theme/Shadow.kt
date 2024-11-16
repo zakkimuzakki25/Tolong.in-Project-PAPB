@@ -17,7 +17,7 @@ fun Modifier.buttonShadow(): Modifier = this
 fun Modifier.navBarShadow(): Modifier = this
     .graphicsLayer {
         shadowElevation = 8.dp.toPx()
-        translationY = -2.dp.toPx()
+        translationY = 2.dp.toPx()
     }
     .background(Color(0x0F000000))
 
