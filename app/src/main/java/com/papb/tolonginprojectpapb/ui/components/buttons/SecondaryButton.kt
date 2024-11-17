@@ -33,7 +33,7 @@ fun SecondaryButton(
         border = if (isActive) BorderStroke(2.dp, Primary500) else BorderStroke(2.dp, Based100),
         shape = RoundedCornerShape(50),
         modifier = Modifier
-            .size(height = 35.dp, width = size.width.dp)
+            .size(height = 36.dp, width = size.width.dp)
     ) {
         Text(
             text = text,

@@ -22,7 +22,7 @@ val SetTypography = Typography(
         fontFamily = MaisonNeue,
         fontWeight = FontWeight.Bold,
         fontSize = 32.sp,
-        lineHeight = 38.4.sp,
+        lineHeight = 32.sp,
         letterSpacing = 0.sp
     ),
     // Display Medium (Heading 2)
@@ -30,7 +30,7 @@ val SetTypography = Typography(
         fontFamily = MaisonNeue,
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
-        lineHeight = 28.8.sp,
+        lineHeight = 24.sp,
         letterSpacing = 0.sp
     ),
     // Display Small (Heading 3)
@@ -38,7 +38,7 @@ val SetTypography = Typography(
         fontFamily = MaisonNeue,
         fontWeight = FontWeight.Bold,
         fontSize = 20.sp,
-        lineHeight = 24.sp,
+        lineHeight = 20.sp,
         letterSpacing = 0.sp
     ),
     // Headline Large (Heading 4)
@@ -46,7 +46,7 @@ val SetTypography = Typography(
         fontFamily = MaisonNeue,
         fontWeight = FontWeight.Bold,
         fontSize = 18.sp,
-        lineHeight = 21.6.sp,
+        lineHeight = 18.sp,
         letterSpacing = 0.sp
     ),
     // Headline Medium (Heading 1 - DemiBold)
@@ -54,7 +54,7 @@ val SetTypography = Typography(
         fontFamily = MaisonNeue,
         fontWeight = FontWeight.SemiBold,
         fontSize = 32.sp,
-        lineHeight = 38.4.sp,
+        lineHeight = 32.sp,
         letterSpacing = 0.sp
     ),
     // Headline Small (Heading 2 - DemiBold)
@@ -62,7 +62,7 @@ val SetTypography = Typography(
         fontFamily = MaisonNeue,
         fontWeight = FontWeight.SemiBold,
         fontSize = 24.sp,
-        lineHeight = 28.8.sp,
+        lineHeight = 24.sp,
         letterSpacing = 0.sp
     ),
     // Title Large (Heading 3 - DemiBold)
@@ -70,7 +70,7 @@ val SetTypography = Typography(
         fontFamily = MaisonNeue,
         fontWeight = FontWeight.SemiBold,
         fontSize = 20.sp,
-        lineHeight = 24.sp,
+        lineHeight = 20.sp,
         letterSpacing = 0.sp
     ),
     // Title Medium (Heading 4 - DemiBold)
@@ -78,7 +78,7 @@ val SetTypography = Typography(
         fontFamily = MaisonNeue,
         fontWeight = FontWeight.SemiBold,
         fontSize = 18.sp,
-        lineHeight = 21.6.sp,
+        lineHeight = 18.6.sp,
         letterSpacing = 0.sp
     ),
     // Title Small (Body 1 - Medium)
@@ -86,7 +86,7 @@ val SetTypography = Typography(
         fontFamily = MaisonNeue,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
-        lineHeight = 24.sp,
+        lineHeight = 16.sp,
         letterSpacing = 0.sp
     ),
     // Body Large (Body 1 - Medium)
@@ -94,7 +94,7 @@ val SetTypography = Typography(
         fontFamily = MaisonNeue,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
-        lineHeight = 24.sp,
+        lineHeight = 16.sp,
         letterSpacing = 0.sp
     ),
     // Body Medium (Body 2 - Medium)
@@ -102,7 +102,7 @@ val SetTypography = Typography(
         fontFamily = MaisonNeue,
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
-        lineHeight = 21.sp,
+        lineHeight = 14.sp,
         letterSpacing = 0.sp
     ),
     // Body Small (Body 3 - Light)
@@ -110,7 +110,7 @@ val SetTypography = Typography(
         fontFamily = MaisonNeue,
         fontWeight = FontWeight.Light,
         fontSize = 12.sp,
-        lineHeight = 18.sp,
+        lineHeight = 12.sp,
         letterSpacing = 0.sp
     ),
     // Label Large
@@ -118,7 +118,7 @@ val SetTypography = Typography(
         fontFamily = MaisonNeue,
         fontWeight = FontWeight.SemiBold,
         fontSize = 16.sp,
-        lineHeight = 21.sp,
+        lineHeight = 16.sp,
         letterSpacing = 0.sp
     ),
     // Label Medium
@@ -126,7 +126,7 @@ val SetTypography = Typography(
         fontFamily = MaisonNeue,
         fontWeight = FontWeight.SemiBold,
         fontSize = 14.sp,
-        lineHeight = 21.sp,
+        lineHeight = 14.sp,
         letterSpacing = 0.sp
     ),
     // Label Small

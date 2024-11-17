@@ -26,7 +26,12 @@ fun BackHeader(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 18.dp, horizontal = 20.dp)
+            .padding(
+                top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 16.dp,
+                start = 20.dp,
+                end = 20.dp,
+                bottom = 20.dp
+            )
             .background(Color.White),
         contentAlignment = Alignment.Center
     ) {
