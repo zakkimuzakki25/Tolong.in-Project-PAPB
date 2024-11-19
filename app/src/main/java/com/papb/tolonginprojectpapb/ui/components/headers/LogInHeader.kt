@@ -13,21 +13,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.papb.tolonginprojectpapb.R
 import com.papb.tolonginprojectpapb.ui.theme.Neutral400
 
 @Composable
-fun AuthHeader(
+fun LogInHeader(
     onBackClick: () -> Unit
 ) {
     Box(modifier = Modifier
-            .fillMaxWidth()
-        )
+        .fillMaxWidth()
+    )
     {
         Image(
-            painter = painterResource(id = R.drawable.ic_wave_background),
+            painter = painterResource(id = R.drawable.ic_wave_background2),
             contentDescription = "Background",
             modifier = Modifier
                 .fillMaxWidth()
@@ -55,7 +54,7 @@ fun AuthHeader(
                         .padding(10.dp)
                 ) {
                     IconButton(
-                        onClick = onBackClick,
+                        onClick = { (onBackClick()) },
                         modifier = Modifier.fillMaxSize()
                     ) {
                         Icon(
@@ -68,7 +67,7 @@ fun AuthHeader(
             }
 
             Image(
-                painter = painterResource(id = R.drawable.ic_logo_filled),
+                painter = painterResource(id = R.drawable.ic_splash_logo_png),
                 contentDescription = "Logo",
                 modifier = Modifier.size(width = 135.dp, height = 36.47.dp)
             )

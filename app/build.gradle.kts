@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -64,6 +65,8 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -74,4 +77,23 @@ dependencies {
 
 //    splash screen
     implementation(libs.androidx.core.splashscreen)
+
+//    firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
+    implementation("com.google.firebase:firebase-analytics")
+
+    // cameraX
+    implementation("androidx.camera:camera-core:1.2.0")
+    implementation("androidx.camera:camera-camera2:1.2.0")
+    implementation("androidx.camera:camera-lifecycle:1.2.0")
+//    implementation("androidx.camera:camera-video:1.2.0")
+    implementation("androidx.camera:camera-view:1.2.0")
+
+    implementation("androidx.camera:camera-extensions:1.4.0")
+
+    implementation("com.google.guava:guava:32.1.3-android")
+
+//    coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
 }
