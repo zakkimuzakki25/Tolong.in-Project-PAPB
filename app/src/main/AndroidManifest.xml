@@ -19,6 +19,12 @@
         android:theme="@style/Theme.TolonginProjectPAPB"
         tools:targetApi="31">
         <activity
+            android:name=".activities.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.AksiActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.CameraActivity"
             android:exported="false" />
         <activity

@@ -32,7 +32,7 @@ fun PrimerButton(
         ),
         shape = RoundedCornerShape(50),
         modifier = Modifier
-            .size(height = 36.dp, width = size.width.dp)
+            .size(height = 34.dp, width = size.width.dp)
     ) {
         Text(
             text = text,

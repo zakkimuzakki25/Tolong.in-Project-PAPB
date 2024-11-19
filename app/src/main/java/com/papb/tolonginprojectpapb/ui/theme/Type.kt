@@ -134,7 +134,7 @@ val SetTypography = Typography(
         fontFamily = MaisonNeue,
         fontWeight = FontWeight.SemiBold,
         fontSize = 12.sp,
-        lineHeight = 21.sp,
+        lineHeight = 12.sp,
         letterSpacing = 0.sp
     )
 )

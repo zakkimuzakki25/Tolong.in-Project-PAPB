@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -32,15 +31,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.papb.tolonginprojectpapb.R
 import com.papb.tolonginprojectpapb.ui.theme.MaisonNeue
 import com.papb.tolonginprojectpapb.ui.theme.Neutral200
-import com.papb.tolonginprojectpapb.ui.theme.Primary200
 import com.papb.tolonginprojectpapb.ui.theme.Primary500
-import com.papb.tolonginprojectpapb.ui.theme.Secondary200
-import com.papb.tolonginprojectpapb.ui.theme.navBarShadow
 
 sealed class BottomNavItem(val route: String, val icon: Int, val selectedIcon: Int, val title: String) {
-    data object Aksi : BottomNavItem("aksi", R.drawable.ic_aksi, R.drawable.ic_aksi_filled, "Aksi")
-    data object Forum : BottomNavItem("forum", R.drawable.ic_forum, R.drawable.ic_forum_filled, "Forum")
-    data object Profil : BottomNavItem("profil", R.drawable.ic_profil, R.drawable.ic_profil_filled, "Profil")
+    object Aksi : BottomNavItem("aksi", R.drawable.ic_aksi, R.drawable.ic_aksi_filled, "Aksi")
+    object Forum : BottomNavItem("forum", R.drawable.ic_forum, R.drawable.ic_forum_filled, "Forum")
+    object Profil : BottomNavItem("profil", R.drawable.ic_profil, R.drawable.ic_profil_filled, "Profil")
 }
 
 @Composable
@@ -57,12 +53,13 @@ fun BottomBar(navController: NavHostController) {
             .wrapContentHeight()
             .padding(bottom = 12.dp)
             .shadow(16.dp, shape = RoundedCornerShape(topStart = 14.dp, topEnd = 14.dp))
+            .background(Color.White)
     ) {
         BottomAppBar(
             modifier = Modifier
                 .clip(RoundedCornerShape(topStart = 14.dp, topEnd = 14.dp))
                 .wrapContentHeight(),
-            containerColor = Color.White,
+            containerColor = Color.White
         ) {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
@@ -72,21 +69,25 @@ fun BottomBar(navController: NavHostController) {
                     .fillMaxWidth()
                     .wrapContentHeight(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 items.forEach { item ->
                     val isSelected = currentRoute == item.route
 
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
+                        modifier = Modifier.padding(vertical = 8.dp)
                     ) {
                         IconButton(
                             onClick = {
-                                navController.navigate(item.route) {
-                                    popUpTo(navController.graph.startDestinationId) { saveState = true }
-                                    launchSingleTop = true
-                                    restoreState = true
+                                // Avoid re-navigation to the current route
+                                if (currentRoute != item.route) {
+                                    navController.navigate(item.route) {
+                                        // Keep the back stack clean
+                                        popUpTo(navController.graph.startDestinationId) { saveState = true }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
                                 }
                             },
                             enabled = currentRoute != item.route,
@@ -98,13 +99,14 @@ fun BottomBar(navController: NavHostController) {
                                 modifier = Modifier.size(24.dp)
                             )
                         }
+
                         Text(
                             text = item.title,
                             fontFamily = MaisonNeue,
                             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium,
                             color = if (isSelected) Primary500 else Neutral200,
                             fontSize = 14.sp,
-                            lineHeight = 14.sp,
+                            lineHeight = 16.sp
                         )
                     }
                 }
@@ -112,3 +114,4 @@ fun BottomBar(navController: NavHostController) {
         }
     }
 }
+

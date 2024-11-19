@@ -5,44 +5,45 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.Text
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.lifecycleScope
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.papb.tolonginprojectpapb.activities.SignUpActivity
-import com.papb.tolonginprojectpapb.ui.theme.TolonginProjectPAPBTheme
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.papb.tolonginprojectpapb.ui.components.navigation.BottomBar
+import com.papb.tolonginprojectpapb.ui.navigation.AppNavHost
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
-//        val splashscreen = installSplashScreen()
-//        var keepSplashScreen = true
         super.onCreate(savedInstanceState)
-//        splashscreen.setKeepOnScreenCondition { keepSplashScreen }
-
         firebaseAuth = FirebaseAuth.getInstance()
 
-        lifecycleScope.launch {
-//            delay(1000)
-//            keepSplashScreen = false
+        enableEdgeToEdge()
 
+        setContent {
             if (firebaseAuth.currentUser == null) {
                 val intent = Intent(this@MainActivity, SignUpActivity::class.java)
                 startActivity(intent)
-//                finish() // Close MainActivity to prevent going back
+                finish()
             } else {
-                setContent {
-                    TolonginProjectPAPBTheme {
-                        Text("Hello")
+                val navController = rememberNavController()
+
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = {
+                        BottomBar(navController = navController)
                     }
+                ) { innerPadding ->
+                    AppNavHost(navController = navController, modifier = Modifier.padding(0.dp))
                 }
             }
         }
-
-        enableEdgeToEdge()
     }
 }
+
