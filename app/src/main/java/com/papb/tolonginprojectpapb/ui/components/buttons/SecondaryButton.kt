@@ -21,7 +21,8 @@ fun SecondaryButton(
     text: String,
     isActive: Boolean,
     size: ButtonSize,
-    handle: () -> Unit
+    handle: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Button(
         onClick = handle,
