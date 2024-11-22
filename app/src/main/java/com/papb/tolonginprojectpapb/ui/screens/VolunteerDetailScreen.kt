@@ -236,7 +236,7 @@ fun VolunteerDetailScreen(viewModel: VolunteerDetailViewModel) {
             }
 
             PrimerButton(
-                text = if (isJoined) "Gabung" else "Tergabung",
+                text = if (!isJoined) "Gabung" else "Tergabung",
                 isActive = !isJoined,
                 handle = { showJoinPopup = true },
                 size = ButtonSize.LARGE
@@ -428,4 +428,3 @@ fun VolunteerDetailScreen(viewModel: VolunteerDetailViewModel) {
         }
     }
 }
-
