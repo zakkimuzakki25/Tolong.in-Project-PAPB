@@ -1,21 +1,39 @@
 package com.papb.tolonginprojectpapb.activities
 
 import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.papb.tolonginprojectpapb.R
+import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Modifier
+import com.papb.tolonginprojectpapb.ui.components.headers.BackHeader
+import com.papb.tolonginprojectpapb.ui.screens.VolunteerDetailScreen
+import com.papb.tolonginprojectpapb.viewmodel.VolunteerDetailViewModel
 
-class VolunteerDetailActivity : AppCompatActivity() {
+class VolunteerDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val volunteerId = intent.getStringExtra("volunteer_id") ?: ""
+
+        val viewModel: VolunteerDetailViewModel by viewModels {
+            VolunteerDetailViewModel.Factory(volunteerId)
+        }
+
         enableEdgeToEdge()
-        setContentView(R.layout.activity_volunteer_detail)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        setContent {
+            Scaffold (
+                topBar = {
+                    BackHeader("Volunteer", {})
+                }
+            ) { innerPadding ->
+                Column (modifier = Modifier.padding(innerPadding)) {
+                    VolunteerDetailScreen(viewModel = viewModel)
+                }
+            }
         }
     }
 }

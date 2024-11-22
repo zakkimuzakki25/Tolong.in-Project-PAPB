@@ -43,11 +43,11 @@ fun LogInScreen(
 ) {
     val context = LocalContext.current
 
-    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
 
-    val isFormValid = username.isNotBlank() && password.isNotBlank()
+    val isFormValid = email.isNotBlank() && password.isNotBlank()
 
     BackHandler(enabled = true) {
         (context as? ComponentActivity)?.finish()
@@ -66,11 +66,11 @@ fun LogInScreen(
         }
 
         InputBar(
-            type = InputType.TEXT,
-            value = username,
-            onValueChange = { username = it },
-            label = "Username",
-            placeHolder = "Username"
+            type = InputType.EMAIL,
+            value = email,
+            onValueChange = { email = it },
+            label = "Email",
+            placeHolder = "Email"
         )
         InputBar(
             type = InputType.PASSWORD,
@@ -82,21 +82,18 @@ fun LogInScreen(
 
         PrimerButton(
             text = "Masuk",
-            isActive = isFormValid && !isLoading, // Tombol aktif jika form valid dan tidak loading
+            isActive = isFormValid && !isLoading,
             size = ButtonSize.LARGE,
             handle = {
                 isLoading = true
                 val auth = FirebaseAuth.getInstance()
 
-                // Login ke Firebase
-                auth.signInWithEmailAndPassword(username, password)
+                auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         isLoading = false
                         if (task.isSuccessful) {
-                            // Login berhasil, lanjutkan ke layar berikutnya
                             onLoginSuccess()
                         } else {
-                            // Login gagal, tampilkan pesan kesalahan
                             val errorMessage =
                                 task.exception?.message ?: "Login gagal, periksa kembali kredensial Anda"
                             Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()

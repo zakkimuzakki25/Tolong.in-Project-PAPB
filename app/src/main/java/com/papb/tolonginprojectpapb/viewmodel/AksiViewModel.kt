@@ -24,17 +24,26 @@ class AksiViewModel : ViewModel() {
     private fun fetchVolunteers() {
         _isLoading.value = true
         val db = FirebaseFirestore.getInstance()
-        db.collection("open_volunteer").get()
+
+        db.collection("open_volunteers").get()
             .addOnSuccessListener { result ->
-                val volunteers = result.map { document ->
-                    document.toObject(OpenVolunteer::class.java)
+                if (result.isEmpty) {
+                    _volunteerList.value = emptyList()
+                    _errorMessage.value = "No volunteers found."
+                } else {
+                    val volunteers = result.mapNotNull { document ->
+                        document.toObject(OpenVolunteer::class.java).copy(
+                            id = document.id
+                        )
+                    }
+                    _volunteerList.value = volunteers
                 }
-                _volunteerList.value = volunteers
                 _isLoading.value = false
             }
             .addOnFailureListener { exception ->
-                _errorMessage.value = exception.message
+                _errorMessage.value = "Failed to fetch data: ${exception.localizedMessage}"
                 _isLoading.value = false
             }
     }
+
 }

@@ -1,5 +1,6 @@
 package com.papb.tolonginprojectpapb.ui.components.cards
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,9 +21,13 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import coil.compose.rememberAsyncImagePainter
+import com.papb.tolonginprojectpapb.activities.SignUpActivity
+import com.papb.tolonginprojectpapb.activities.VolunteerDetailActivity
 import com.papb.tolonginprojectpapb.entities.OpenVolunteer
 import com.papb.tolonginprojectpapb.ui.components.buttons.ButtonSize
 import com.papb.tolonginprojectpapb.ui.components.buttons.PrimerButton
@@ -83,12 +88,23 @@ fun OpenVolunteerCard(volunteer: OpenVolunteer) {
                     horizontalArrangement = Arrangement.End,
                     modifier = Modifier.padding(top = 8.dp).fillMaxWidth()
                 ) {
+                    val context = LocalContext.current
                     PrimerButton(
                         text = "Beraksi",
                         size = ButtonSize.SMALL,
                         isActive = true,
-                        handle = {}
+                        handle = {
+                            if (volunteer.id.isNotEmpty()) {
+                                val intent = Intent(context, VolunteerDetailActivity::class.java).apply {
+                                    putExtra("volunteer_id", volunteer.id)
+                                }
+                                context.startActivity(intent)
+                            } else {
+                                println("Error: Volunteer ID is empty")
+                            }
+                        }
                     )
+
                 }
             }
         }
