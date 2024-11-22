@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.papb.tolonginprojectpapb.ui.screens.AksiScreen
+import com.papb.tolonginprojectpapb.ui.screens.ProfileScreen
 import com.papb.tolonginprojectpapb.viewmodel.AksiViewModel
 
 @Composable
@@ -27,8 +28,7 @@ fun AppNavHost(
         }
 
         composable("profil") {
-            val viewModel = viewModel<AksiViewModel>()
-            AksiScreen(viewModel)
+            ProfileScreen()
         }
     }
 }
