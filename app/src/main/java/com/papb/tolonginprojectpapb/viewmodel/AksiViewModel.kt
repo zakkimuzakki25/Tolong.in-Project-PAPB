@@ -34,8 +34,8 @@ class AksiViewModel : ViewModel() {
         val db = FirebaseFirestore.getInstance()
         db.collection("campaign_missions").whereEqualTo("is_big", false).get()
             .addOnSuccessListener { result ->
-                val missions = result.mapNotNull { document ->
-                    document.toObject(CampaignMission::class.java)
+                val missions = result.documents.mapNotNull { document ->
+                    document.toObject(CampaignMission::class.java)?.copy(id = document.id)
                 }
                 _dailyMissionList.value = missions
             }
@@ -48,8 +48,8 @@ class AksiViewModel : ViewModel() {
         val db = FirebaseFirestore.getInstance()
         db.collection("campaign_missions").whereEqualTo("is_big", true).get()
             .addOnSuccessListener { result ->
-                val missions = result.mapNotNull { document ->
-                    document.toObject(CampaignMission::class.java)
+                val missions = result.documents.mapNotNull { document ->
+                    document.toObject(CampaignMission::class.java)?.copy(id = document.id)
                 }
                 _bigMissionList.value = missions
             }
