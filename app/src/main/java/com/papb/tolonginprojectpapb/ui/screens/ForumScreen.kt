@@ -7,14 +7,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Comment
-import androidx.compose.material.icons.filled.Comment
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
@@ -33,6 +30,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.papb.tolonginprojectpapb.R
+import com.papb.tolonginprojectpapb.ui.theme.Neutral500
 import com.papb.tolonginprojectpapb.ui.theme.Secondary500
 import com.papb.tolonginprojectpapb.viewmodel.ForumViewModel
 
@@ -291,9 +289,9 @@ fun PostCard(post: Post, onClick: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.Comment,
+                        painter = painterResource(R.drawable.ic_comment),
                         contentDescription = "Comments",
-                        tint = Color.Gray
+                        tint = Neutral500
                     )
                     Text(
                         text = "${post.comments} Comments",
