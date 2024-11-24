@@ -12,10 +12,11 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModelProvider
 import com.papb.tolonginprojectpapb.ui.components.headers.BackHeader
+import com.papb.tolonginprojectpapb.ui.screens.BigMissionDetailScreen
 import com.papb.tolonginprojectpapb.ui.screens.DailyMissionDetailScreen
 import com.papb.tolonginprojectpapb.viewmodel.MissionViewModel
 
-class DailyMissionDetailActivity : ComponentActivity() {
+class MissionDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -40,9 +41,19 @@ class DailyMissionDetailActivity : ComponentActivity() {
                 }
             ) { innerPadding ->
                 Column(modifier = Modifier.padding(innerPadding)) {
-                    when (mission) {
-                        null -> Text(text = "Loading...")
-                        else -> DailyMissionDetailScreen(mission = mission!!)
+                    when {
+                        mission == null -> {
+                            Text(text = "Loading...")
+                        }
+                        !mission!!.is_big -> {
+                            DailyMissionDetailScreen(mission = mission!!)
+                        }
+                        mission!!.is_big -> {
+                            BigMissionDetailScreen(mission = mission!!)
+                        }
+                        else -> {
+                            Text(text = "Mission details not available.")
+                        }
                     }
                 }
             }

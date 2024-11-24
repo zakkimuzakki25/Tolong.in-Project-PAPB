@@ -27,6 +27,7 @@ import com.papb.tolonginprojectpapb.R
 import com.papb.tolonginprojectpapb.entities.CampaignMission
 import com.papb.tolonginprojectpapb.ui.components.buttons.ButtonSize
 import com.papb.tolonginprojectpapb.ui.components.buttons.PrimerButton
+import com.papb.tolonginprojectpapb.ui.components.cards.StatisticCard
 import com.papb.tolonginprojectpapb.ui.components.popups.PopUpAddMission
 import com.papb.tolonginprojectpapb.ui.components.popups.PopUpMissionSucces
 import com.papb.tolonginprojectpapb.ui.theme.Based200
@@ -200,29 +201,3 @@ fun DailyMissionDetailScreen(
         )
     }
 }
-
-@Composable
-fun StatisticCard(value: String, label: String, modifier: Modifier = Modifier, id_icon: Int) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = modifier
-            .shadow(
-                elevation = 8.dp,
-                shape = RoundedCornerShape(16.dp)
-            )
-            .background(Color.White, shape = RoundedCornerShape(16.dp))
-            .padding(horizontal = 8.dp, vertical = 20.dp)
-    ) {
-        Icon(
-            painter = painterResource(id = id_icon),
-            contentDescription = "Star Icon",
-            tint = Primary500,
-            modifier = Modifier.size(24.dp)
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text = value, style = SetTypography.labelLarge, color = Primary500, textAlign = TextAlign.Center)
-        Text(text = label, style = SetTypography.bodySmall, color = Neutral500, textAlign = TextAlign.Center)
-    }
-}
-

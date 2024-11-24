@@ -1,5 +1,6 @@
 package com.papb.tolonginprojectpapb.ui.components.cards
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,11 +21,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.papb.tolonginprojectpapb.R
+import com.papb.tolonginprojectpapb.activities.MissionDetailActivity
 import com.papb.tolonginprojectpapb.ui.components.buttons.ButtonSize
 import com.papb.tolonginprojectpapb.ui.components.buttons.PrimerButton
 import com.papb.tolonginprojectpapb.ui.theme.Neutral200
@@ -55,6 +58,8 @@ fun BigMissionCard(
             containerColor = Color.White
         )
     ) {
+        val context = LocalContext.current
+
         Column(
             modifier = Modifier.padding(vertical = 14.dp, horizontal = 12.dp)
         ) {
@@ -121,7 +126,10 @@ fun BigMissionCard(
                     text = "Lakukan",
                     isActive = true,
                     handle = {
-
+                        val intent = Intent(context, MissionDetailActivity::class.java).apply {
+                            putExtra("MISSION_ID", id)
+                        }
+                        context.startActivity(intent)
                     },
                     size = ButtonSize.SMALL,
                 )

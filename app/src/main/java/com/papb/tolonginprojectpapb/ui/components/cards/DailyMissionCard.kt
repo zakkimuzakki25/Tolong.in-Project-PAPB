@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.papb.tolonginprojectpapb.R
-import com.papb.tolonginprojectpapb.activities.DailyMissionDetailActivity
+import com.papb.tolonginprojectpapb.activities.MissionDetailActivity
 import com.papb.tolonginprojectpapb.ui.components.buttons.ButtonSize
 import com.papb.tolonginprojectpapb.ui.components.buttons.PrimerButton
 import com.papb.tolonginprojectpapb.ui.theme.Neutral500
@@ -102,12 +102,11 @@ fun DailyMissionCard(
             }
         }
 
-        // Tombol di bagian bawah
         PrimerButton(
             text = "Lakukan",
             isActive = true,
             handle = {
-                val intent = Intent(context, DailyMissionDetailActivity::class.java).apply {
+                val intent = Intent(context, MissionDetailActivity::class.java).apply {
                     putExtra("MISSION_ID", id)
                 }
                 context.startActivity(intent)

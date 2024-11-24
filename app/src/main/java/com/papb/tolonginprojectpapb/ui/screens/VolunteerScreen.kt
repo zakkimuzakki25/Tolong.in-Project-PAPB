@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.papb.tolonginprojectpapb.entities.OpenVolunteer
 import com.papb.tolonginprojectpapb.ui.components.cards.OpenVolunteerCard
@@ -22,8 +21,6 @@ fun VolunteerScreen(openVolunteerList: List<OpenVolunteer>) {
     Column(
         modifier = Modifier.padding(horizontal = 16.dp)
     ){
-        val context = LocalContext.current
-
         Text(
             text = "Volunteer",
             style = SetTypography.labelLarge,

@@ -52,7 +52,7 @@
             android:name=".activities.BigMissionDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.DailyMissionDetailActivity"
+            android:name=".activities.MissionDetailActivity"
             android:exported="false" />
         <activity
             android:name=".activities.VolunteerActionActivity"
