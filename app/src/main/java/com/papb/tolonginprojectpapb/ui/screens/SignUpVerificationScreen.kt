@@ -43,6 +43,12 @@ fun SignUpVerificationScreen(
     val auth = FirebaseAuth.getInstance()
     val db = FirebaseFirestore.getInstance()
 
+    val avatarUrls = listOf(
+        "https://firebasestorage.googleapis.com/v0/b/flonn-pubek.appspot.com/o/tolongin%2Favatar%2Favatar1.png?alt=media&token=d71f2b83-7d4d-4b94-8875-fd030a5f23b4",
+        "https://firebasestorage.googleapis.com/v0/b/flonn-pubek.appspot.com/o/tolongin%2Favatar%2Favatar2.png?alt=media&token=fbf3bf6c-8258-42f8-8975-50f4138ffcd8",
+        "https://firebasestorage.googleapis.com/v0/b/flonn-pubek.appspot.com/o/tolongin%2Favatar%2Favatar3.png?alt=media&token=58881db4-9059-46c0-93ec-c50152fefaad"
+    )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -120,13 +126,17 @@ fun SignUpVerificationScreen(
 
                                 uploadTask.addOnSuccessListener {
                                     storageReference.downloadUrl.addOnSuccessListener { uri ->
+
+                                        val randomAvatarUrl = avatarUrls.random()
+
                                         val userData = hashMapOf(
                                             "fullname" to fullName,
                                             "username" to username,
                                             "phone" to phone,
                                             "birth_date" to birthDate,
                                             "email" to email,
-                                            "ktp_url" to uri.toString() // Save the KTP URL
+                                            "ktp_url" to uri.toString(),
+                                            "avatar_url" to randomAvatarUrl
                                         )
 
                                         db.collection("users").document(userId)

@@ -1,13 +1,15 @@
 package com.papb.tolonginprojectpapb.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -15,10 +17,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.papb.tolonginprojectpapb.R
+import com.papb.tolonginprojectpapb.ui.theme.SetTypography
+import com.papb.tolonginprojectpapb.viewmodel.ProfileViewModel
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(viewModel: ProfileViewModel) {
     val navController = rememberNavController()
 
     NavHost(
@@ -26,14 +31,13 @@ fun ProfileScreen() {
         startDestination = "main_profile"
     ) {
         composable("main_profile") {
-            MainProfileScreen(navController)
+            MainProfileScreen(navController, viewModel)
         }
         composable("settings") {
             ProfileSettingScreen(
                 onBackClick = { navController.popBackStack() },
                 onEditProfileClick = { navController.navigate("edit_profile") },
                 onConfirmSignOut = {
-                    // Handle logout action here
                     navController.popBackStack("main_profile", inclusive = true)
                 }
             )
@@ -41,7 +45,7 @@ fun ProfileScreen() {
         composable("edit_profile") {
             ProfileEditScreen(
                 onSaveClick = { name, phone, email ->
-                    // Save the updated profile
+                    viewModel.updateProfile(name, phone, email)
                     navController.popBackStack()
                 },
                 onCancelClick = {
@@ -54,7 +58,8 @@ fun ProfileScreen() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainProfileScreen(navController: NavHostController) {
+fun MainProfileScreen(navController: NavHostController, viewModel: ProfileViewModel) {
+    val user by viewModel.user.observeAsState()
     val tabs = listOf("Unggahan", "Total Karbon")
     var selectedTabIndex by remember { mutableStateOf(0) }
 
@@ -84,8 +89,43 @@ fun MainProfileScreen(navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Profile Section
-        ProfileHeaderSection()
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                AsyncImage(
+                    model = user?.avatar_url,
+                    contentDescription = "User Avatar",
+                    modifier = Modifier
+                        .size(72.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Column {
+                    Text(
+                        text = user?.fullname ?: "Nama tidak ditemukan",
+                        style = SetTypography.bodyLarge
+                    )
+                    Text(
+                        text = user?.let { "@${it.username}" } ?: "@username",
+                        style = SetTypography.bodySmall,
+                        color = Color.Black
+                    )
+                    Text(
+                        text = user?.let { "🌟 ${it.xp}" } ?: "🌟 0",
+                        style = SetTypography.bodySmall,
+                        color = Color.Black
+                    )
+                }
+            }
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -111,50 +151,8 @@ fun MainProfileScreen(navController: NavHostController) {
 
         Box(modifier = Modifier.fillMaxSize().padding(16.dp)) {
             when (selectedTabIndex) {
-                0 -> ProfilePostsScreen()
-                1 -> ProfileCarboScreen()
-            }
-        }
-    }
-}
-
-@Composable
-fun ProfileHeaderSection() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.Start
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.avatar_placeholder),
-                contentDescription = "User Avatar",
-                modifier = Modifier
-                    .size(72.dp)
-                    .clip(CircleShape)
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Column {
-                Text(
-                    text = "Naufal Afkaar",
-                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
-                )
-                Text(
-                    text = "@afkaarroar",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Text(
-                    text = "🌟 250 points",
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                )
+                0 -> ProfilePostsScreen(viewModel)
+                1 -> ProfileCarboScreen(viewModel)
             }
         }
     }

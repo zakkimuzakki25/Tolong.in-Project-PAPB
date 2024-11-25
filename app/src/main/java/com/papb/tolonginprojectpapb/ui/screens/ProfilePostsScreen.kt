@@ -10,9 +10,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.papb.tolonginprojectpapb.ui.components.cards.PostCard
 import com.papb.tolonginprojectpapb.viewmodel.ProfilePostsViewModel
+import com.papb.tolonginprojectpapb.viewmodel.ProfileViewModel
 
 @Composable
-fun ProfilePostsScreen(viewModel: ProfilePostsViewModel = viewModel()) {
+fun ProfilePostsScreen(viewModel: ProfileViewModel) {
     val posts by viewModel.posts.collectAsState()
 
     LazyColumn(
