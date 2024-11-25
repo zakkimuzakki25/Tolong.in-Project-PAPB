@@ -11,6 +11,7 @@ import com.papb.tolonginprojectpapb.ui.screens.ForumScreen
 import com.papb.tolonginprojectpapb.ui.screens.ProfileScreen
 import com.papb.tolonginprojectpapb.viewmodel.AksiViewModel
 import com.papb.tolonginprojectpapb.viewmodel.ForumViewModel
+import com.papb.tolonginprojectpapb.viewmodel.ProfileViewModel
 
 @Composable
 fun AppNavHost(
@@ -30,7 +31,8 @@ fun AppNavHost(
         }
 
         composable("profil") {
-            ProfileScreen()
+            val viewModel = viewModel<ProfileViewModel>()
+            ProfileScreen(viewModel)
         }
     }
 }
