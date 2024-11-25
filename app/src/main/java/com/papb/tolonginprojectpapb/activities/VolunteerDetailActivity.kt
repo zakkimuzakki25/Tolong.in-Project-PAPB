@@ -27,7 +27,7 @@ class VolunteerDetailActivity : ComponentActivity() {
         setContent {
             Scaffold (
                 topBar = {
-                    BackHeader("Volunteer", {})
+                    BackHeader("Volunteer")
                 }
             ) { innerPadding ->
                 Column (modifier = Modifier.padding(innerPadding)) {

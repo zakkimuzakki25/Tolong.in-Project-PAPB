@@ -7,8 +7,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.papb.tolonginprojectpapb.ui.screens.AksiScreen
+import com.papb.tolonginprojectpapb.ui.screens.ForumScreen
 import com.papb.tolonginprojectpapb.ui.screens.ProfileScreen
 import com.papb.tolonginprojectpapb.viewmodel.AksiViewModel
+import com.papb.tolonginprojectpapb.viewmodel.ForumViewModel
 
 @Composable
 fun AppNavHost(
@@ -23,8 +25,8 @@ fun AppNavHost(
         }
 
         composable("forum") {
-            val viewModel = viewModel<AksiViewModel>()
-            AksiScreen(viewModel)
+            val viewModel = viewModel<ForumViewModel>()
+            ForumScreen(viewModel)
         }
 
         composable("profil") {

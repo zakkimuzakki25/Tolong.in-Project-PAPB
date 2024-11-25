@@ -1,5 +1,6 @@
 package com.papb.tolonginprojectpapb.ui.components.headers
 
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -10,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -20,9 +22,10 @@ import com.papb.tolonginprojectpapb.ui.theme.SetTypography
 @Composable
 fun BackHeader(
     title: String,
-    onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current as? Activity
+
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -41,7 +44,9 @@ fun BackHeader(
             tint = Color.White,
             modifier = Modifier
                 .size(32.dp)
-                .clickable { onBackClick() }
+                .clickable {
+                    context?.finish()
+                }
                 .background(Primary500, shape = MaterialTheme.shapes.extraLarge)
                 .padding(8.dp)
                 .align(Alignment.CenterStart)

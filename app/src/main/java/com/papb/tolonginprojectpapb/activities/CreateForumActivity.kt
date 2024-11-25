@@ -1,21 +1,26 @@
 package com.papb.tolonginprojectpapb.activities
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.papb.tolonginprojectpapb.R
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.lifecycle.ViewModelProvider
+import com.papb.tolonginprojectpapb.ui.screens.CreateForumScreen
+import com.papb.tolonginprojectpapb.viewmodel.CreateForumViewModel
+import com.papb.tolonginprojectpapb.ui.theme.TolonginProjectPAPBTheme
 
-class CreateForumActivity : AppCompatActivity() {
+class CreateForumActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_create_forum)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        val viewModel = ViewModelProvider(this)[CreateForumViewModel::class.java]
+
+        setContent {
+            TolonginProjectPAPBTheme {
+                CreateForumScreen(
+                    viewModel = viewModel,
+                    onForumCreated = { finish() }
+                )
+            }
         }
     }
 }

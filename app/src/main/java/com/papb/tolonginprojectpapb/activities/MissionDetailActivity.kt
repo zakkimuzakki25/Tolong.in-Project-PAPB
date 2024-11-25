@@ -34,8 +34,7 @@ class MissionDetailActivity : ComponentActivity() {
                 topBar = {
                     if (mission != null) {
                         BackHeader(
-                            title = mission!!.title,
-                            onBackClick = { finish() }
+                            title = mission!!.title
                         )
                     }
                 }

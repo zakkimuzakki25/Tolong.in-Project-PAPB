@@ -33,8 +33,7 @@ fun ProfileEditScreen(
     Scaffold(
         topBar = {
             BackHeader(
-                title = "Edit Profil",
-                onBackClick = onCancelClick
+                title = "Edit Profil"
             )
         }
     ) { paddingValues ->

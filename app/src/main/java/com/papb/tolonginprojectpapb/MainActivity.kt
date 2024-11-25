@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.papb.tolonginprojectpapb.activities.SignUpActivity
@@ -40,10 +39,12 @@ class MainActivity : ComponentActivity() {
                         BottomBar(navController = navController)
                     }
                 ) { innerPadding ->
-                    AppNavHost(navController = navController, modifier = Modifier.padding(0.dp))
+                    AppNavHost(
+                        navController = navController,
+                        modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())
+                    )
                 }
             }
         }
     }
 }
-

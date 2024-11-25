@@ -119,9 +119,6 @@ fun SignUpScreenController(screensStack: MutableList<String>) {
                 onNextClick = {
                     screensStack.add("SignUpSuccessScreen")
                 },
-                onCancel = {
-                    screensStack.removeLastOrNull()
-                },
                 onCaptureImage = {
                     val intent = Intent(context, CameraActivity::class.java)
                     launcher.launch(intent)

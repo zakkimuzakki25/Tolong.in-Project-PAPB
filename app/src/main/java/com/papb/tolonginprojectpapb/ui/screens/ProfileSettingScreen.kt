@@ -23,8 +23,7 @@ fun ProfileSettingScreen(
     Scaffold(
         topBar = {
             BackHeader(
-                title = "Pengaturan",
-                onBackClick = onBackClick
+                title = "Pengaturan"
             )
         }
     ) { paddingValues ->
@@ -33,7 +32,7 @@ fun ProfileSettingScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally // Memastikan konten berada di tengah secara horizontal
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Layanan Pengaduan
             Card(

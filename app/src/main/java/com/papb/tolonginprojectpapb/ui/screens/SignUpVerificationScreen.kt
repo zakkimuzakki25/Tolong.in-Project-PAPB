@@ -1,5 +1,6 @@
 package com.papb.tolonginprojectpapb.ui.screens
 
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.papb.tolonginprojectpapb.R
 import com.papb.tolonginprojectpapb.ui.components.buttons.ButtonSize
 import com.papb.tolonginprojectpapb.ui.components.buttons.PrimerButton
@@ -27,7 +29,6 @@ import com.papb.tolonginprojectpapb.ui.theme.SetTypography
 @Composable
 fun SignUpVerificationScreen(
     onNextClick: () -> Unit,
-    onCancel: () -> Unit,
     onCaptureImage: () -> Unit,
     imageUri: String,
     fullName: String,
@@ -47,7 +48,7 @@ fun SignUpVerificationScreen(
             .fillMaxSize()
             .padding(horizontal = 16.dp, vertical = 24.dp),
     ) {
-        if (imageUri.isEmpty()){
+        if (imageUri.isEmpty()) {
             Text(
                 text = "Verifikasi Identitasmu",
                 style = SetTypography.headlineSmall,
@@ -96,7 +97,6 @@ fun SignUpVerificationScreen(
             }
         }
 
-
         Spacer(modifier = Modifier.weight(1f))
 
         PrimerButton(
@@ -104,48 +104,61 @@ fun SignUpVerificationScreen(
             isActive = true,
             size = ButtonSize.LARGE,
             handle = {
-                if (imageUri == "") {
+                if (imageUri.isEmpty()) {
                     onCaptureImage()
                 } else {
-                    // Proses pendaftaran
                     auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                // Ambil user ID dari Firebase Authentication
                                 val userId = auth.currentUser?.uid ?: return@addOnCompleteListener
 
-                                // Simpan data tambahan ke Firestore
-                                val userData = hashMapOf(
-                                    "fullName" to fullName,
-                                    "username" to username,
-                                    "phone" to phone,
-                                    "birthDate" to birthDate,
-                                    "email" to email
-                                )
+                                val storageReference = FirebaseStorage.getInstance()
+                                    .reference
+                                    .child("tolongin/ktp/${userId}.jpg")
 
-                                db.collection("users").document(userId)
-                                    .set(userData)
-                                    .addOnSuccessListener {
-                                        // Jika berhasil, lanjutkan ke layar success
-                                        onNextClick()
+                                val uploadTask = storageReference.putFile(Uri.parse(imageUri))
+
+                                uploadTask.addOnSuccessListener {
+                                    storageReference.downloadUrl.addOnSuccessListener { uri ->
+                                        val userData = hashMapOf(
+                                            "fullname" to fullName,
+                                            "username" to username,
+                                            "phone" to phone,
+                                            "birth_date" to birthDate,
+                                            "email" to email,
+                                            "ktp_url" to uri.toString() // Save the KTP URL
+                                        )
+
+                                        db.collection("users").document(userId)
+                                            .set(userData)
+                                            .addOnSuccessListener {
+                                                onNextClick()
+                                            }
+                                            .addOnFailureListener { e ->
+                                                Toast.makeText(
+                                                    context,
+                                                    "Gagal menyimpan data: ${e.message}",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
                                     }
-                                    .addOnFailureListener { e ->
-                                        Toast.makeText(
-                                            context,
-                                            "Gagal menyimpan data: ${e.message}",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
+                                }.addOnFailureListener { e ->
+                                    Toast.makeText(
+                                        context,
+                                        "Gagal mengunggah KTP: ${e.message}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             } else {
                                 val errorMessage = task.exception?.message ?: "Pendaftaran gagal"
                                 Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
                             }
                         }
                 }
-
             }
         )
 
         Spacer(modifier = Modifier.height(8.dp))
     }
 }
+

@@ -27,12 +27,9 @@ class CameraActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Memeriksa izin kamera
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            // Izin diberikan, mulai kamera
             startCamera()
         } else {
-            // Meminta izin kamera
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.CAMERA),
@@ -40,15 +37,12 @@ class CameraActivity : ComponentActivity() {
             )
         }
 
-        // Initialize the camera executor
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
-    // Memproses hasil permintaan izin
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Izin diberikan, mulai kamera
                 startCamera()
             } else {
                 Toast.makeText(this, "Izin kamera diperlukan untuk melanjutkan", Toast.LENGTH_SHORT).show()
@@ -57,7 +51,6 @@ class CameraActivity : ComponentActivity() {
     }
 
     private fun startCamera() {
-        // Menyiapkan camera provider
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
         cameraProviderFuture.addListener({
@@ -74,7 +67,6 @@ class CameraActivity : ComponentActivity() {
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
 
-                // Set the preview to the PreviewView in the UI
                 setContent {
                     CameraScreen(
                         onCaptureComplete = { capturedUri ->
