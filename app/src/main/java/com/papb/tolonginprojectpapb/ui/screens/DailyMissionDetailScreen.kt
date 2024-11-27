@@ -42,7 +42,7 @@ fun DailyMissionDetailScreen(
 ) {
     var showIsiDokumentasiPopup by remember { mutableStateOf(false) }
     var isMissionCompleted by remember { mutableStateOf(false) }
-    var isMissionSuccse by remember { mutableStateOf(false) }
+    var isMissionSucces by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(true) }
 
     val firestore = FirebaseFirestore.getInstance()
@@ -188,14 +188,42 @@ fun DailyMissionDetailScreen(
             onConfirm = {
                 isMissionCompleted = true
                 showIsiDokumentasiPopup = false
-                isMissionSuccse = true
+                isMissionSucces = true
+
+                firestore.collection("users").document(userId).get()
+                    .addOnSuccessListener { document ->
+                        if (document.exists()) {
+                            val currentXp = document.getLong("xp") ?: 0
+                            val currentCo2Saved = document.getDouble("co2_saved") ?: 0.0
+
+                            val newXp = currentXp + mission.plus_xp
+                            val newCo2Saved = currentCo2Saved + (mission.co2_saved ?: 0.0)
+
+                            firestore.collection("users").document(userId)
+                                .update(mapOf(
+                                    "xp" to newXp,
+                                    "co2_saved" to newCo2Saved
+                                ))
+                                .addOnSuccessListener {
+                                    println("XP dan CO2 berhasil diperbarui")
+                                }
+                                .addOnFailureListener { e ->
+                                    println("Gagal memperbarui data pengguna: ${e.message}")
+                                }
+                        } else {
+                            println("Dokumen pengguna tidak ditemukan")
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        println("Gagal mengambil data pengguna: ${e.message}")
+                    }
             }
         )
     }
 
-    if (isMissionSuccse) {
+    if (isMissionSucces) {
         PopUpMissionSucces(
-            onDismiss = { isMissionSuccse = false },
+            onDismiss = { isMissionSucces = false },
             title = mission.title,
             xp = mission.plus_xp
         )

@@ -13,7 +13,7 @@ data class CampaignMission(
     val plus_xp: Int = 0,
     val category: String = "",
     val illustration_url: String = "",
-    val water_saved: Float = 0f,
-    val co2_saved: Float = 0f,
-    val electricity_saved: Float = 0f
+    val water_saved: Double = 0.0,
+    val co2_saved: Double = 0.0,
+    val electricity_saved: Double = 0.0
 )

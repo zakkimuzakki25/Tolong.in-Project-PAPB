@@ -100,8 +100,7 @@ fun SignUpDataScreen(
 //        Spacer(modifier = Modifier.height(8.dp))
         PrimerButton(
             text = "Lanjutkan",
-//            isActive = isFormValid,
-            isActive = true,
+            isActive = isFormValid,
             size = ButtonSize.LARGE,
             handle = { onNextClick(fullName, email, username, phone, birthDate) }
         )

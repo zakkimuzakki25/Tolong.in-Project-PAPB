@@ -132,7 +132,7 @@ fun SignUpVerificationScreen(
                                         val userData = hashMapOf(
                                             "fullname" to fullName,
                                             "username" to username,
-                                            "phone" to phone,
+                                            "phone_number" to phone,
                                             "birth_date" to birthDate,
                                             "email" to email,
                                             "ktp_url" to uri.toString(),

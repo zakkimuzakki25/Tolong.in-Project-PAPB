@@ -13,11 +13,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class ProfileViewModel : ViewModel() {
 
     private val firestore = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
+
+    private val userId = FirebaseAuth.getInstance().currentUser?.uid
 
     private val _user = MutableLiveData<User>()
     val user: LiveData<User> = _user
@@ -43,85 +46,127 @@ class ProfileViewModel : ViewModel() {
     private val _posts = MutableStateFlow<List<Post>>(emptyList())
     val posts: StateFlow<List<Post>> = _posts.asStateFlow()
 
+    private val _birthDate = MutableLiveData<String>()
+    val birthDate: LiveData<String> = _birthDate
+
     init {
         fetchUserData()
         fetchCarbonData()
         loadProfilePosts()
     }
 
-    // Fetch user data from Firestore
     private fun fetchUserData() {
-        val userId = auth.currentUser?.uid ?: return
-        firestore.collection("users")
-            .document(userId)
-            .get()
-            .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    val user = document.toObject(User::class.java)
-                    user?.let {
-                        _name.value = it.fullname
-                        _phoneNumber.value = it.phone_number
-                        _email.value = it.email
-                        _avatarUrl.value = it.avatar_url
-                        _xp.value = it.xp
-
-                        _user.value = it
+        userId?.let { uid ->
+            firestore.collection("users")
+                .document(uid)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        _name.value = document.getString("fullname") ?: ""
+                        _phoneNumber.value = document.getString("phone_number") ?: ""
+                        _birthDate.value = document.getString("birth_date") ?: ""
+                        _avatarUrl.value = document.getString("avatar_url") ?: ""
                     }
                 }
-            }
-            .addOnFailureListener { e ->
-                println("Failed to fetch user data: ${e.message}")
-            }
-    }
-
-    // Fetch carbon data (can be updated to fetch from Firestore if needed)
-    private fun fetchCarbonData() {
-        // Example placeholder, replace with database fetching if necessary
-        _carbonData.value = Pair(30.59, 780.0)
-    }
-
-    // Load profile posts
-    private fun loadProfilePosts() {
-        val userId = auth.currentUser?.uid ?: return
-        viewModelScope.launch {
-            val forums = mutableListOf<Forum>()
-            val missions = mutableMapOf<String, CampaignMission>()
-
-            firestore.collection("forums")
-                .whereEqualTo("user_id", userId)
-                .get()
-                .addOnSuccessListener { forumResult ->
-                    forums.addAll(forumResult.toObjects(Forum::class.java))
-
-                    firestore.collection("campaign_missions")
-                        .get()
-                        .addOnSuccessListener { missionResult ->
-                            missionResult.forEach { document ->
-                                missions[document.id] = document.toObject(CampaignMission::class.java)
-                            }
-
-                            val combinedPosts = forums.mapNotNull { forum ->
-                                val mission = missions[forum.mission_id]
-                                if (mission != null) {
-                                    Post(forum, mission)
-                                } else {
-                                    null
-                                }
-                            }
-
-                            _posts.value = combinedPosts
-                        }
-                        .addOnFailureListener { e ->
-                            println("Failed to fetch missions: ${e.message}")
-                        }
-                }
                 .addOnFailureListener { e ->
-                    println("Failed to fetch forums: ${e.message}")
+                    println("Failed to fetch user data: ${e.message}")
                 }
         }
     }
 
-    // Update user profile
+    fun updateName(newName: String) {
+        _name.value = newName
+    }
+
+    fun updatePhoneNumber(newPhoneNumber: String) {
+        _phoneNumber.value = newPhoneNumber
+    }
+
+    fun updateBirthDate(newBirthDate: String) {
+        _birthDate.value = newBirthDate
+    }
+
+    fun saveProfile(name: String, phoneNumber: String, birthDate: String) {
+        userId?.let { uid ->
+            val updatedData = mapOf(
+                "fullname" to name,
+                "phone_number" to phoneNumber,
+                "birth_date" to birthDate
+            )
+
+            firestore.collection("users")
+                .document(uid)
+                .update(updatedData)
+                .addOnSuccessListener {
+                    println("Profile updated successfully")
+                }
+                .addOnFailureListener { e ->
+                    println("Failed to update profile: ${e.message}")
+                }
+        }
+    }
+
+    private fun fetchCarbonData() {
+        userId?.let { uid ->
+            firestore.collection("users").document(uid)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val co2Saved = document.getDouble("co2_saved") ?: 0.0
+                        val waterSaved = document.getDouble("water_saved") ?: 0.0
+                        _carbonData.postValue(Pair(co2Saved, waterSaved))
+                    } else {
+                        _carbonData.postValue(Pair(0.0, 0.0))
+                    }
+                }
+                .addOnFailureListener { e ->
+                    println("Error fetching CO2 data: ${e.message}")
+                    _carbonData.postValue(Pair(0.0, 0.0))
+                }
+        } ?: run {
+            _carbonData.postValue(Pair(0.0, 0.0))
+        }
+    }
+
+    fun loadProfilePosts() {
+        val userId = auth.currentUser?.uid ?: return
+        viewModelScope.launch {
+            try {
+                val forums = firestore.collection("forums")
+                    .whereEqualTo("user_id", userId)
+                    .get()
+                    .await()
+                    .toObjects(Forum::class.java)
+                    .mapNotNull { forum ->
+                        forum.copy(id = forum.id)
+                    }
+
+                val missionsSnapshot = firestore.collection("campaign_missions")
+                    .get()
+                    .await()
+
+                val missions = missionsSnapshot.documents.associate { document ->
+                    val mission = document.toObject(CampaignMission::class.java)
+                    document.id to mission?.copy(id = document.id)
+                }
+
+                val combinedPosts = forums.mapNotNull { forum ->
+                    val mission = missions[forum.mission_id]
+                    if (mission != null) {
+                        Post(forum, mission)
+                    } else {
+                        null
+                    }
+                }
+
+                _posts.value = combinedPosts
+            } catch (e: Exception) {
+                println("Error loading profile posts: ${e.message}")
+            }
+        }
+    }
+
+
     fun updateProfile(newName: String, newPhoneNumber: String, newEmail: String) {
         val userId = auth.currentUser?.uid ?: return
         val updatedData = mapOf(

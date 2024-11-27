@@ -213,9 +213,38 @@ fun BigMissionDetailScreen(
                 isMissionCompleted = true
                 showIsiDokumentasiPopup = false
                 isMissionSuccse = true
+
+                firestore.collection("users").document(userId).get()
+                    .addOnSuccessListener { document ->
+                        if (document.exists()) {
+                            val currentXp = document.getLong("xp") ?: 0
+                            val currentCo2Saved = document.getDouble("co2_saved") ?: 0.0
+
+                            val newXp = currentXp + mission.plus_xp
+                            val newCo2Saved = currentCo2Saved + (mission.co2_saved ?: 0.0)
+
+                            firestore.collection("users").document(userId)
+                                .update(mapOf(
+                                    "xp" to newXp,
+                                    "co2_saved" to newCo2Saved
+                                ))
+                                .addOnSuccessListener {
+                                    println("XP dan CO2 berhasil diperbarui")
+                                }
+                                .addOnFailureListener { e ->
+                                    println("Gagal memperbarui data pengguna: ${e.message}")
+                                }
+                        } else {
+                            println("Dokumen pengguna tidak ditemukan")
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        println("Gagal mengambil data pengguna: ${e.message}")
+                    }
             }
         )
     }
+
 
     if (isMissionSuccse) {
         PopUpMissionSucces(

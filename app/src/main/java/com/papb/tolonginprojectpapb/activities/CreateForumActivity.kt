@@ -1,5 +1,6 @@
 package com.papb.tolonginprojectpapb.activities
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,7 +20,10 @@ class CreateForumActivity : ComponentActivity() {
             TolonginProjectPAPBTheme {
                 CreateForumScreen(
                     viewModel = viewModel,
-                    onForumCreated = { finish() }
+                    onForumCreated = {
+                        setResult(RESULT_OK)
+                        finish()
+                    }
                 )
             }
         }

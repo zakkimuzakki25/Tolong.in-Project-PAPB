@@ -25,12 +25,13 @@ class ForumViewModel : ViewModel() {
         loadPosts()
     }
 
-    private fun loadPosts() {
+    fun loadPosts() {
         viewModelScope.launch {
             val forums = mutableListOf<Forum>()
             val missions = mutableMapOf<String, CampaignMission>()
 
             firestore.collection("forums")
+                .orderBy("time", com.google.firebase.firestore.Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener { forumResult ->
                     forums.addAll(forumResult.toObjects(Forum::class.java))

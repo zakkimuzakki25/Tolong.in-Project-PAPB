@@ -3,6 +3,7 @@ package com.papb.tolonginprojectpapb.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
@@ -13,22 +14,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.papb.tolonginprojectpapb.ui.components.buttons.PrimerButton
 import com.papb.tolonginprojectpapb.ui.components.buttons.SecondaryButton
 import com.papb.tolonginprojectpapb.ui.components.headers.BackHeader
-import com.papb.tolonginprojectpapb.viewmodel.ProfileEditViewModel
+import com.papb.tolonginprojectpapb.ui.components.inputs.InputBar
+import com.papb.tolonginprojectpapb.ui.components.inputs.InputType
+import com.papb.tolonginprojectpapb.ui.theme.Primary500
+import com.papb.tolonginprojectpapb.viewmodel.ProfileViewModel
 
 @Composable
 fun ProfileEditScreen(
     onSaveClick: (String, String, String) -> Unit,
     onCancelClick: () -> Unit,
-    viewModel: ProfileEditViewModel = viewModel()
+    viewModel: ProfileViewModel = viewModel()
 ) {
     val name by viewModel.name.observeAsState("")
     val phoneNumber by viewModel.phoneNumber.observeAsState("")
-    val email by viewModel.email.observeAsState("")
+    val birthDate by viewModel.birthDate.observeAsState("")
 
     Scaffold(
         topBar = {
@@ -39,43 +45,54 @@ fun ProfileEditScreen(
     ) { paddingValues ->
         Column(
             modifier = Modifier
-                .padding(paddingValues)
+                .padding(top = paddingValues.calculateTopPadding())
                 .fillMaxSize()
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ProfileAvatarSection()
+            // Gambar profil
+            AsyncImage(
+                model = viewModel.avatarUrl.observeAsState("").value,
+                contentDescription = "Profile Picture",
+                modifier = Modifier
+                    .size(72.dp)
+                    .background(Primary500, RoundedCornerShape(50)),
+                contentScale = ContentScale.Crop
+            )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            OutlinedTextField(
+            InputBar(
+                type = InputType.TEXT,
                 value = name,
-                onValueChange = { viewModel.updateProfile(it, phoneNumber, email) },
-                label = { Text("Nama Lengkap") },
-                modifier = Modifier.fillMaxWidth()
+                onValueChange = { viewModel.updateName(it) },
+                label = "Nama Lengkap",
+                placeHolder = "Masukkan nama lengkap"
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
+            InputBar(
+                type = InputType.PHONE,
                 value = phoneNumber,
-                onValueChange = { viewModel.updateProfile(name, it, email) },
-                label = { Text("Nomor Telepon") },
-                modifier = Modifier.fillMaxWidth()
+                onValueChange = { viewModel.updatePhoneNumber(it) },
+                label = "Nomor Telepon",
+                placeHolder = "Masukkan nomor telepon"
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
-                value = email,
-                onValueChange = { viewModel.updateProfile(name, phoneNumber, it) },
-                label = { Text("Email") },
-                modifier = Modifier.fillMaxWidth()
+            InputBar(
+                type = InputType.DATE,
+                value = birthDate,
+                onValueChange = { viewModel.updateBirthDate(it) },
+                label = "Tanggal Lahir",
+                placeHolder = "Masukkan tanggal lahir"
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Tombol Batal
+            // Tombol batal
             SecondaryButton(
                 text = "Batal",
                 isActive = true,
@@ -86,14 +103,11 @@ fun ProfileEditScreen(
                     .padding(vertical = 16.dp)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Tombol Simpan
             PrimerButton(
                 text = "Simpan",
                 isActive = true,
                 size = com.papb.tolonginprojectpapb.ui.components.buttons.ButtonSize.LARGE,
-                handle = { onSaveClick(name, phoneNumber, email) },
+                handle = { onSaveClick(name, phoneNumber, birthDate) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp)
@@ -102,18 +116,3 @@ fun ProfileEditScreen(
     }
 }
 
-@Composable
-fun ProfileAvatarSection() {
-    Box(
-        contentAlignment = Alignment.BottomEnd,
-        modifier = Modifier
-            .size(100.dp)
-            .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
-    ) {
-        Icon(Icons.Default.Person, contentDescription = "Profile Avatar", modifier = Modifier.size(80.dp))
-        IconButton(onClick = { /* Edit Avatar */ }) {
-            Icon(Icons.Default.Edit, contentDescription = "Edit Avatar", tint = MaterialTheme.colorScheme.primary)
-        }
-    }
-}

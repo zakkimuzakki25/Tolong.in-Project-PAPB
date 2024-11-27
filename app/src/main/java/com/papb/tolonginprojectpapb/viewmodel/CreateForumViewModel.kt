@@ -41,32 +41,36 @@ class CreateForumViewModel : ViewModel() {
 
         _isLoading.value = true
 
-        // Fetch user details for username and avatar_url
         firestore.collection("users").document(userId).get()
             .addOnSuccessListener { userDoc ->
                 val username = userDoc.getString("username") ?: "Anonymous"
                 val avatarUrl = userDoc.getString("avatar_url") ?: ""
+                val userId = FirebaseAuth.getInstance().currentUser?.uid
 
-                val forumData = Forum(
-                    username = username,
-                    avatar_url = avatarUrl,
-                    time = Timestamp.now().toDate().toString(), // Use timestamp for time
-                    caption = userInput.value,
-                    likes = 0,
-                    comments = 0,
-                    mission_id = selectedActivityId
-                )
+                val forumData = userId?.let {
+                    Forum(
+                        username = username,
+                        avatar_url = avatarUrl,
+                        time = Timestamp.now().toDate().toString(),
+                        caption = userInput.value,
+                        likes = 0,
+                        comments = 0,
+                        mission_id = selectedActivityId,
+                        user_id = it
+                    )
+                }
 
-                // Submit forum data to Firestore
-                firestore.collection("forums")
-                    .add(forumData)
-                    .addOnSuccessListener {
-                        _isLoading.value = false
-                    }
-                    .addOnFailureListener { e ->
-                        println("Failed to submit forum: ${e.message}")
-                        _isLoading.value = false
-                    }
+                if (forumData != null) {
+                    firestore.collection("forums")
+                        .add(forumData)
+                        .addOnSuccessListener {
+                            _isLoading.value = false
+                        }
+                        .addOnFailureListener { e ->
+                            println("Failed to submit forum: ${e.message}")
+                            _isLoading.value = false
+                        }
+                }
             }
             .addOnFailureListener { e ->
                 println("Failed to fetch user details: ${e.message}")

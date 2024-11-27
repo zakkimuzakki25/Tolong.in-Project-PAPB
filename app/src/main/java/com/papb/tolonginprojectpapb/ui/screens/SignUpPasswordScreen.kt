@@ -101,8 +101,7 @@ fun SignUpPasswordScreen(
 
         PrimerButton(
             text = "Daftar",
-//            isActive = isFormValid,
-            isActive = true,
+            isActive = isFormValid,
             size = ButtonSize.LARGE,
             handle = { onNextClick(password) }
         )

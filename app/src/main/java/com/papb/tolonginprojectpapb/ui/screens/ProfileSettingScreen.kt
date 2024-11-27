@@ -14,7 +14,6 @@ import com.papb.tolonginprojectpapb.ui.components.popups.PopUpSignOut
 
 @Composable
 fun ProfileSettingScreen(
-    onBackClick: () -> Unit,
     onEditProfileClick: () -> Unit,
     onConfirmSignOut: () -> Unit
 ) {
@@ -52,9 +51,8 @@ fun ProfileSettingScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.weight(1f)) // Mendorong konten ke tengah layar secara vertikal
+            Spacer(modifier = Modifier.height(20.dp))
 
-            // Edit Profile Button
             SecondaryButton(
                 text = "Edit Profil",
                 isActive = true,
@@ -67,7 +65,6 @@ fun ProfileSettingScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Logout Button
             PrimerButton(
                 text = "Keluar",
                 isActive = true,

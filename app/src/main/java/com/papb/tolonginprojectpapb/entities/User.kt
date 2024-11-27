@@ -8,6 +8,7 @@ data class User(
     val avatar_url: String = "",
     val birth_date: String = "",
     val xp: Int = 0,
+    val co2_saved: Double? = null,
     val phone_number: String = "",
     val ktp_url: String = "",
     val status: String = "",
