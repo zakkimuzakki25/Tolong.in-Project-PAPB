@@ -1,5 +1,7 @@
 package com.papb.tolonginprojectpapb.ui.components.cards
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,8 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,21 +32,60 @@ import coil.compose.AsyncImage
 import com.papb.tolonginprojectpapb.R
 import com.papb.tolonginprojectpapb.entities.CampaignMission
 import com.papb.tolonginprojectpapb.entities.Forum
-import com.papb.tolonginprojectpapb.ui.theme.Neutral500
+import com.papb.tolonginprojectpapb.ui.theme.Primary500
+import java.time.Duration
+import java.time.Instant
+import java.time.format.DateTimeFormatter
+import java.util.Locale
+import java.time.format.DateTimeFormatterBuilder
 
+@RequiresApi(Build.VERSION_CODES.O)
+fun parseCustomTimestamp(timestamp: String): Instant? {
+    return try {
+        val formatter: DateTimeFormatter = DateTimeFormatterBuilder()
+            .parseCaseInsensitive()
+            .appendPattern("EEE MMM dd HH:mm:ss 'GMT'XXX yyyy")
+            .toFormatter(Locale.ENGLISH)
+
+        val zonedDateTime = formatter.parse(timestamp, java.time.ZonedDateTime::from)
+        zonedDateTime.toInstant()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun formatTimeAgo(timestamp: String): String {
+    return try {
+        val postTime = parseCustomTimestamp(timestamp) ?: return "Waktu tidak valid"
+        val currentTime = Instant.now()
+        val duration = Duration.between(postTime, currentTime)
+
+        when {
+            duration.toMinutes() < 1 -> "Baru saja"
+            duration.toMinutes() < 60 -> "${duration.toMinutes()} menit yang lalu"
+            duration.toHours() < 24 -> "${duration.toHours()} jam yang lalu"
+            duration.toDays() < 7 -> "${duration.toDays()} hari yang lalu"
+            else -> DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.getDefault()).format(postTime)
+        }
+    } catch (e: Exception) {
+        "Waktu tidak valid"
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PostCard(forum: Forum, mission: CampaignMission) {
-    Card(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(6.dp)
+            .padding(vertical = 8.dp)
+            .background(Color.White),
     ) {
         Column(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp)
                 .fillMaxWidth()
         ) {
             Row(
@@ -58,7 +97,7 @@ fun PostCard(forum: Forum, mission: CampaignMission) {
                     contentDescription = "Profile Picture",
                     modifier = Modifier
                         .size(40.dp)
-                        .background(Color.Gray, RoundedCornerShape(50)),
+                        .background(Primary500, RoundedCornerShape(50)),
                     contentScale = ContentScale.Crop
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -70,7 +109,7 @@ fun PostCard(forum: Forum, mission: CampaignMission) {
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
                     )
                     Text(
-                        text = forum.time,
+                        text = formatTimeAgo(forum.time),
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.Gray
                     )
@@ -82,15 +121,13 @@ fun PostCard(forum: Forum, mission: CampaignMission) {
                 )
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = forum.caption,
                 style = MaterialTheme.typography.bodyMedium.copy(lineHeight = 20.sp),
                 color = Color.DarkGray
             )
-
-            Spacer(modifier = Modifier.height(12.dp))
 
             BigMissionCard(
                 title = mission.title,
@@ -101,7 +138,7 @@ fun PostCard(forum: Forum, mission: CampaignMission) {
                 category = mission.category
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -114,7 +151,8 @@ fun PostCard(forum: Forum, mission: CampaignMission) {
                     Icon(
                         imageVector = Icons.Default.Favorite,
                         contentDescription = "Likes",
-                        tint = Color.Gray
+                        tint = Color.Gray,
+                        modifier = Modifier.size(24.dp)
                     )
                     Text(
                         text = "${forum.likes} Likes",
@@ -131,7 +169,8 @@ fun PostCard(forum: Forum, mission: CampaignMission) {
                     Icon(
                         painter = painterResource(R.drawable.ic_comment),
                         contentDescription = "Comments",
-                        tint = Neutral500
+                        tint = Color.Gray,
+                        modifier = Modifier.size(20.dp)
                     )
                     Text(
                         text = "${forum.comments} Comments",

@@ -39,7 +39,7 @@ class ForumViewModel : ViewModel() {
                         .get()
                         .addOnSuccessListener { missionResult ->
                             missionResult.forEach { document ->
-                                missions[document.id] = document.toObject(CampaignMission::class.java)
+                                missions[document.id] = document.toObject(CampaignMission::class.java).copy(id = document.id)
                             }
 
                             val combinedPosts = forums.mapNotNull { forum ->

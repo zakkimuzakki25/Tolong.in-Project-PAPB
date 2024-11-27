@@ -1,34 +1,48 @@
 package com.papb.tolonginprojectpapb.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.papb.tolonginprojectpapb.R
+import com.papb.tolonginprojectpapb.ui.components.buttons.ButtonSize
+import com.papb.tolonginprojectpapb.ui.components.buttons.PrimerButton
+import com.papb.tolonginprojectpapb.ui.components.headers.BackHeader
+import com.papb.tolonginprojectpapb.ui.theme.Neutral500
+import com.papb.tolonginprojectpapb.ui.theme.Primary500
+import com.papb.tolonginprojectpapb.ui.theme.Secondary500
+import com.papb.tolonginprojectpapb.ui.theme.SetTypography
 import com.papb.tolonginprojectpapb.ui.viewmodel.CreateForumViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateForumScreen(viewModel: CreateForumViewModel, onForumCreated: () -> Unit) {
-    val userInput by viewModel.userInput.collectAsState()
+    val userInput by viewModel.userInput.collectAsState("Saya telah menyelesaikan aktivitas, sekarang giliranmu!")
     val isLoading by viewModel.isLoading.collectAsState()
+    val recentActivities by viewModel.recentActivities.collectAsState()
+    var selectedActivityId by remember { mutableStateOf<String?>(null) }
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Unggah Kegiatan") }
-            )
+            BackHeader("Unggah Kegiatan")
         }
     ) { padding ->
         Column(
@@ -37,118 +51,102 @@ fun CreateForumScreen(viewModel: CreateForumViewModel, onForumCreated: () -> Uni
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_profile),
-                    contentDescription = "User Profile",
-                    modifier = Modifier
-                        .size(50.dp)
-                        .padding(end = 8.dp)
-                )
-                Column {
-                    Text(text = "Naufal Afkaar", fontWeight = FontWeight.Bold)
-                    Text(text = "@afkaaroar", style = MaterialTheme.typography.bodySmall)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
             Text(
                 text = "Ceritakan Kegiatanmu!",
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                style = SetTypography.titleMedium
             )
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = userInput,
                 onValueChange = viewModel::onUserInputChange,
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("Ketik disini!") }
+                modifier = Modifier.fillMaxWidth().height(135.dp),
+                placeholder = { Text("Ketik disini!", style = SetTypography.bodyMedium) },
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
                 text = "Kegiatan Terakhir",
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                style = SetTypography.titleMedium
             )
             Spacer(modifier = Modifier.height(8.dp))
 
-            RecentActivityCard(
-                title = "Hemat Energi",
-                category = "Lingkungan",
-                xp = "+20",
-                iconResId = R.drawable.ic_profile2
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            RecentActivityCard(
-                title = "Jalan Kaki",
-                category = "Travel",
-                xp = "+50",
-                iconResId = R.drawable.ic_add_forum
-            )
+            recentActivities.forEach { activity ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .shadow(
+                            elevation = 8.dp,
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .clickable { selectedActivityId = activity.id },
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (selectedActivityId == activity.id) Primary500 else Color.White
+                    )
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Image(
+                            painter = rememberAsyncImagePainter(model = activity.imageUrl),
+                            contentDescription = "Activity Image",
+                            modifier = Modifier.size(50.dp)
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = activity.title,
+                                style = SetTypography.labelMedium,
+                                color = if (selectedActivityId == activity.id) Color.White else Primary500
+                            )
+                            Text(
+                                text = activity.category,
+                                fontSize = 10.sp,
+                                color = Neutral500,
+                                modifier = Modifier
+                                    .background(Secondary500, shape = RoundedCornerShape(50))
+                                    .padding(vertical = 1.dp, horizontal = 4.dp)
+                            )
+                        }
+
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_star),
+                                contentDescription = "Star Icon",
+                                tint = Secondary500,
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = "+${activity.xp} XP",
+                                style = SetTypography.bodySmall,
+                                color = if (selectedActivityId == activity.id) Color.White else Neutral500
+                            )
+                        }
+                    }
+                }
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Button(
-                onClick = { viewModel.submitActivity(); onForumCreated() },
-                modifier = Modifier.fillMaxWidth(),
-                enabled = !isLoading
-            ) {
-                if (isLoading) {
-                    CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary)
-                } else {
-                    Text("Kirim")
+            PrimerButton(
+                text = if (isLoading) "Mengirim" else "Kirim",
+                size = ButtonSize.LARGE,
+                isActive = !isLoading && selectedActivityId != null && userInput.isNotEmpty(),
+                handle = {
+                    selectedActivityId?.let { activityId ->
+                        viewModel.submitActivity(activityId)
+                        onForumCreated()
+                    }
                 }
-            }
-        }
-    }
-}
-
-@Composable
-fun RecentActivityCard(title: String, category: String, xp: String, iconResId: Int) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Icon
-            Image(
-                painter = painterResource(id = iconResId),
-                contentDescription = null,
-                modifier = Modifier.size(40.dp)
             )
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            // Title and Category
-            Column(modifier = Modifier.weight(1f)) {
-                Text(text = title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                Text(
-                    text = category,
-                    color = Color(0xFFFFA000),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium
-                )
-            }
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_star),
-                    contentDescription = null,
-                    tint = Color(0xFFFFC107),
-                    modifier = Modifier.size(20.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(text = xp, fontWeight = FontWeight.Bold, color = Color(0xFF4CAF50))
-            }
         }
     }
 }

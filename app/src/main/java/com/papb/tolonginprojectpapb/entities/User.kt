@@ -13,3 +13,14 @@ data class User(
     val status: String = "",
     val joined_volunteers: MutableList<String> = mutableListOf()
 )
+
+// model
+
+data class RecentActivity(
+    val id: String,
+    val title: String,
+    val timestamp: Long,
+    val category: String,
+    val imageUrl: String,
+    val xp: Long
+)

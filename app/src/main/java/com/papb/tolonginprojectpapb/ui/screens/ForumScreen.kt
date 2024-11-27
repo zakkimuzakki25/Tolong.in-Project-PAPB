@@ -25,6 +25,7 @@ import com.papb.tolonginprojectpapb.activities.CreateForumActivity
 //import com.papb.tolonginprojectpapb.activities.CreateForumActivity
 import com.papb.tolonginprojectpapb.ui.components.cards.PostCard
 import com.papb.tolonginprojectpapb.ui.components.headers.NonBackHeader
+import com.papb.tolonginprojectpapb.ui.theme.Primary200
 import com.papb.tolonginprojectpapb.ui.theme.Primary500
 import com.papb.tolonginprojectpapb.viewmodel.ForumViewModel
 
@@ -68,6 +69,7 @@ fun ForumScreen(viewModel: ForumViewModel) {
                 .padding(innerPadding)
                 .padding(horizontal = 8.dp, vertical = 8.dp)
                 .verticalScroll(rememberScrollState())
+                .background(Color.White)
         ) {
             Text(
                 text = "Terbaru",
@@ -88,6 +90,10 @@ fun ForumScreen(viewModel: ForumViewModel) {
 
             posts.forEach { post ->
                 PostCard(forum = post.forum, mission = post.mission)
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = Primary200
+                )
             }
 
             Spacer(modifier = Modifier.height(120.dp))

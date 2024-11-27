@@ -406,6 +406,7 @@ fun VolunteerDetailScreen(viewModel: VolunteerDetailViewModel) {
                                 println("Gagal bergabung: $error")
                             },
                             onSuccess = {
+                                isJoined = true
                                 println("Berhasil bergabung dengan volunteer!")
                             }
                         )
