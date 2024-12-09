@@ -66,6 +66,7 @@ class ProfileViewModel : ViewModel() {
                         _phoneNumber.value = document.getString("phone_number") ?: ""
                         _birthDate.value = document.getString("birth_date") ?: ""
                         _avatarUrl.value = document.getString("avatar_url") ?: ""
+                        _user.value = document.toObject(User::class.java)
                     }
                 }
                 .addOnFailureListener { e ->
