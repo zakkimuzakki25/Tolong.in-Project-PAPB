@@ -33,7 +33,7 @@ fun ProfileCarboScreen(viewModel: ProfileViewModel) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Kamu menghasilkan total ${carbonData?.first} kg karbon",
+            text = "Kamu menghemat total ${carbonData?.first} kg karbon",
             style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground),
             textAlign = TextAlign.Center
         )
